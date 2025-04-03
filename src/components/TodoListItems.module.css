@@ -1,0 +1,10 @@
+.todo_list{
+    width: 100%;
+}
+.filters{
+    display: flex;
+    flex-direction: column;
+}
+.todo_items{
+    display: flex;
+}

@@ -1,0 +1,24 @@
+.main{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    align-items: center;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+}
+.todoList{
+    display: flex;
+    width: 200px;
+    margin: 70px;
+
+}
+.createTodoLists{
+    display: flex;
+    justify-content: center;
+}

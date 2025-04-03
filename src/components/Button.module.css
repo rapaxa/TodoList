@@ -1,0 +1,22 @@
+.button_delete {
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: darkslategray;
+    display: flex;
+
+}
+.button_add_task{
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: #2c8e8e;
+}
+.button_filters{
+    width: 20px;
+    height: 20px;
+}
