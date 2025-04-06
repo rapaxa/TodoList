@@ -4,6 +4,7 @@ import {v1} from "uuid";
 import {TodoListItems} from "./components/TodoListItems.tsx";
 import {AddList} from "./components/AddList.tsx";
 
+
 export type TodoList = {
     id: string,
     title: string,
@@ -65,6 +66,12 @@ function App() {
             item.id === id ? {...item, filter} : item
         ));
     };
+    const changeTaskTitle = (id: string, idItem: string,newTitle:string) => {
+        setTodoLists({
+            ...todoLists,
+            [idItem]:todoLists[idItem].map(item => item.id === idItem?{...item,title:newTitle}:item)
+        })
+    }
     const createNewList = (title: string) => {
         const id = v1()
         setData([
@@ -80,38 +87,40 @@ function App() {
     const deleteTodoList = (id: string) => {
         setData(data.filter(item => item.id !== id));
     }
+    const todoListsComponents = data.map(item => {
+        const todolistTasks = todoLists[item.id]
+        let filteredTasks = todolistTasks
+        if (item.filter === "active") {
+            filteredTasks = todolistTasks.filter(task => !task.isDone)
+        }
+        if (item.filter === 'completed') {
+            filteredTasks = todolistTasks.filter(task => task.isDone)
+        }
 
+        return (
+
+            <div className={'todoList'} key={item.id}>
+                <TodoListItems id={item.id}
+                               todoList={item}
+                               todoLists={filteredTasks}
+                               addTask={handleCreateTask}
+                               deleteTask={handleDeleteTask}
+                               updateTask={handleUpdateTask}
+                               filter={changeFilterHandler}
+                               deleteList={deleteTodoList}
+                               changeTaskTitle={changeTaskTitle}
+                />
+            </div>
+        )
+    })
     return (
         <>
-            <AddList className={'createTodoLists'} createItem={createNewList}/>
+            <AddList className={'createTodoLists'} createItem={createNewList} maxLength={10}/>
             <div className="container">
-                {data.map(item => {
-                    const todolistTasks = todoLists[item.id]
-                    let filteredTasks = todolistTasks
-                    if (item.filter === "active") {
-                        filteredTasks = todolistTasks.filter(task => !task.isDone)
-                    }
-                    if (item.filter === 'completed') {
-                        filteredTasks = todolistTasks.filter(task => task.isDone)
-                    }
-                    return (
-                        <div className={'todoList'} key={item.id}>
-                            <TodoListItems id={item.id}
-                                           todoList={item}
-                                           todoLists={filteredTasks}
-                                           addTask={handleCreateTask}
-                                           deleteTask={handleDeleteTask}
-                                           updateTask={handleUpdateTask}
-                                           filter={changeFilterHandler}
-                                           deleteList={deleteTodoList}
-                            />
-                        </div>
-                    )
-                })}
+                {todoListsComponents}
             </div>
         </>
-    )
-        ;
-}
 
+    )
+}
 export default App;

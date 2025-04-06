@@ -2,12 +2,12 @@
 
 type ButtonProps = {
     onClickHandler?: () => void,
-    title: string
+    title: React.ReactNode;
     className?: string
 }
 
 export const Button = ({onClickHandler,title,className}:ButtonProps) =>{
-    return(
-        <button className={className} onClick={onClickHandler}>{title}</button>
+    return (
+    <button className={className} onClick={onClickHandler}>{title}</button>
     )
 }

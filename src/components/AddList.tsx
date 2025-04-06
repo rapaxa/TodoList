@@ -1,17 +1,23 @@
-import { useState,type KeyboardEvent} from "react";
+import {useState, type KeyboardEvent} from "react";
 import {Button} from "./Button.tsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import s from './Button.module.css'
+import {faSquarePlus} from "@fortawesome/free-solid-svg-icons";
+
 type AddListProps = {
-    createItem:(text:string) => void;
-    className?:string;
+    createItem: (text: string) => void;
+    className?: string;
+    maxLength: number;
 }
-export const AddList= ({createItem,className}:AddListProps) => {
+export const AddList = ({createItem, className, maxLength}: AddListProps) => {
     const [title, setTitle] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
     const handleCreateTask = () => {
         if (title.trim() !== '') {
-        createItem(title)
+            setError(false);
+            createItem(title)
         } else {
-            console.log('error')
+            setError(true)
         }
 
     }
@@ -23,13 +29,18 @@ export const AddList= ({createItem,className}:AddListProps) => {
     return (
         <div className={className}>
             <input value={title}
-                   onChange={(e) =>{
-                setTitle(e.target.value)
-            }} type="text"
-                    placeholder={'Max value size 12'}
-            onKeyDown={createItemOnEnterHandler}/>
-            <Button className={s.button_add_task} title={'+'} onClickHandler={handleCreateTask}/>
-
+                   onChange={(e) => {
+                       setTitle(e.target.value)
+                   }}
+                   type="text"
+                   maxLength={maxLength}
+                   placeholder={`Max value size ${maxLength}`}
+                   onKeyDown={createItemOnEnterHandler}/>
+            <Button
+                className={s.button_add_task}
+                title={<FontAwesomeIcon style={{width: "100%", height: "100%"}} icon={faSquarePlus} beatFade/>}
+                onClickHandler={handleCreateTask}/>
+            {error && (<div>Введите текст</div>)}
         </div>
     )
 }
