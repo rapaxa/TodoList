@@ -1,5 +1,5 @@
 import './App.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {v1} from "uuid";
 import {TodoListItems} from "./components/TodoListItems.tsx";
 import {AddList} from "./components/AddList.tsx";
@@ -42,6 +42,28 @@ function App() {
             {id: v1(), title: 'XML', isDone: true},
         ]
     })
+    useEffect(() => {
+        getLocalStorage();
+
+    }, []);
+    const setLocalStorage = () => {
+        localStorage.setItem("todo-data", JSON.stringify(data))
+        localStorage.setItem("todo-tasks", JSON.stringify(todoLists))
+    }
+
+    const getLocalStorage = () => {
+        const savedData = localStorage.getItem("todo-data");
+        const savedTasks = localStorage.getItem("todo-tasks");
+
+        if (savedData) {
+            setData(JSON.parse(savedData));
+        }
+        if (savedTasks) {
+            setTodoLists(JSON.parse(savedTasks));
+        }
+    }
+
+
     const handleCreateTask = (id: string, title: string) => {
         setTodoLists({
             ...todoLists,
@@ -79,11 +101,21 @@ function App() {
     }
     const deleteTodoList = (id: string) => {
         setData(data.filter(item => item.id !== id));
+        const updatedTodoLists = {...todoLists};
+        delete updatedTodoLists[id];
+        setTodoLists(updatedTodoLists);
+    };
+    const changeTitleName = (id: string, idItem: string, newTitle: string) => {
+        setTodoLists({
+            ...todoLists,
+            [id]: todoLists[id].map(item => item.id === idItem ? {...item, title: newTitle} : item)
+        })
     }
-
     return (
         <>
             <AddList className={'createTodoLists'} createItem={createNewList}/>
+            <button onClick={setLocalStorage}>SET</button>
+
             <div className="container">
                 {data.map(item => {
                     const todolistTasks = todoLists[item.id]
@@ -104,6 +136,7 @@ function App() {
                                            updateTask={handleUpdateTask}
                                            filter={changeFilterHandler}
                                            deleteList={deleteTodoList}
+                                           changeTitleName={changeTitleName}
                             />
                         </div>
                     )

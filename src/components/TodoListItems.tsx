@@ -1,8 +1,9 @@
 import {Filter, TodoListsItem} from "../App.tsx";
 import {AddList} from "./AddList.tsx";
-import {Button} from "./Button.tsx";
-import s from './Button.module.css'
-import s2 from './TodoListItems.module.css'
+import {TodoListHeader} from "./TodoListHeader.tsx";
+import {TaskItem} from "./TaskItem.tsx";
+import {TaskDeleteButton} from "./TaskDeleteButton.tsx";
+import {FilterButtons} from "./FilterButtons.tsx";
 
 type TodoListItemsProps = {
     id: string;
@@ -13,6 +14,7 @@ type TodoListItemsProps = {
     addTask: (id: string, task: string) => void;
     filter: (id: string, filter: Filter) => void;
     deleteList: (id: string) => void;
+    changeTitleName: (id: string, idItem: string, newTitle: string) => void;
 }
 
 export const TodoListItems = ({
@@ -23,7 +25,8 @@ export const TodoListItems = ({
                                   updateTask,
                                   addTask,
                                   filter,
-                                  deleteList
+                                  deleteList,
+                                  changeTitleName
                               }: TodoListItemsProps) => {
     const changeFilterHandler = (filterValues: Filter) => {
         filter(id, filterValues);
@@ -37,51 +40,43 @@ export const TodoListItems = ({
 
 
     return (
-        <>
-            <div className={s2.todo_list}>
-                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <h3>{todoList.title}</h3>
-                    <Button className={s.button_delete} onClickHandler={deleteTodoList} title={"X"}/>
-                </div>
-                <AddList createItem={createTask}/>
-                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <div className={s2.todo_items}>
-                        {todoLists.length <= 0 ? "Not available tasks" :
-                            <ul>
-                                {todoLists.map(task => (
-                                    <li key={task.id}>
-                                        {task.title}
-                                        <input checked={task.isDone}
-                                               onChange={() => updateTask(id, task.id)}
-                                               type="checkbox"/>
-                                    </li>
-                                ))}
-                            </ul>
-                        }
-                    </div>
-                    <div>
-                        <ul>
-                            {todoLists.map(item => (
-                                <li>
-                                    <button onClick={() => deleteTask(id, item.id)}>X</button>
-                                </li>
-                            ))}
+        <div>
+            <TodoListHeader title={todoList.title} onDelete={deleteTodoList}/>
+            <AddList createItem={createTask}/>
 
-                        </ul>
-                    </div>
-                    <div className={s2.filters}>
-                        <Button className={s.button_filters} title={'All'}
-                                onClickHandler={() => changeFilterHandler('all')}/>
-                        <Button className={s.button_filters} title={'Active'}
-                                onClickHandler={() => changeFilterHandler('active')}/>
-                        <Button className={s.button_filters} title={'Completed'}
-                                onClickHandler={() => changeFilterHandler('completed')}/>
-                    </div>
-                </div>
-
-
+            <div>
+                {todoLists.length === 0 ? (
+                    "Not available tasks"
+                ) : (
+                    <ul>
+                        {todoLists.map(task => (
+                            <TaskItem
+                                key={task.id}
+                                id={id}
+                                task={task}
+                                updateTask={updateTask}
+                                changeTitleName={changeTitleName}
+                            />
+                        ))}
+                    </ul>
+                )}
             </div>
 
-        </>
-    )
+            <div>
+                <ul>
+                    {todoLists.map(item => (
+                        <TaskDeleteButton
+                            key={item.id}
+                            id={id}
+                            taskId={item.id}
+                            onDelete={deleteTask}
+                        />
+                    ))}
+                </ul>
+            </div>
+
+            <FilterButtons onFilterChange={changeFilterHandler}/>
+        </div>
+    );
+
 }

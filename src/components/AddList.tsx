@@ -1,11 +1,9 @@
 import { useState,type KeyboardEvent} from "react";
 import {Button} from "./Button.tsx";
-import s from './Button.module.css'
 type AddListProps = {
     createItem:(text:string) => void;
-    className?:string;
 }
-export const AddList= ({createItem,className}:AddListProps) => {
+export const AddList= ({createItem}:AddListProps) => {
     const [title, setTitle] = useState<string>('');
     const handleCreateTask = () => {
         if (title.trim() !== '') {
@@ -21,14 +19,14 @@ export const AddList= ({createItem,className}:AddListProps) => {
         }
     }
     return (
-        <div className={className}>
+        <div >
             <input value={title}
                    onChange={(e) =>{
                 setTitle(e.target.value)
             }} type="text"
                     placeholder={'Max value size 12'}
             onKeyDown={createItemOnEnterHandler}/>
-            <Button className={s.button_add_task} title={'+'} onClickHandler={handleCreateTask}/>
+            <Button  title={'+'} onClickHandler={handleCreateTask}/>
 
         </div>
     )
