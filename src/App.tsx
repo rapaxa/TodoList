@@ -66,11 +66,16 @@ function App() {
             item.id === id ? {...item, filter} : item
         ));
     };
-    const changeTaskTitle = (id: string, idItem: string,newTitle:string) => {
+    const changeTaskTitle = (id: string, idItem: string, newTitle: string) => {
         setTodoLists({
             ...todoLists,
-            [idItem]:todoLists[idItem].map(item => item.id === idItem?{...item,title:newTitle}:item)
+            [id]: todoLists[id].map(item => item.id === idItem ? {...item, title: newTitle} : item)
         })
+    }
+    const changeTodoListTitle = (id: string, newTitle: string) => {
+        setData([
+            ...data.map(item => item.id === id ? {...item, title: newTitle} : item)
+        ])
     }
     const createNewList = (title: string) => {
         const id = v1()
@@ -87,6 +92,7 @@ function App() {
     const deleteTodoList = (id: string) => {
         setData(data.filter(item => item.id !== id));
     }
+
     const todoListsComponents = data.map(item => {
         const todolistTasks = todoLists[item.id]
         let filteredTasks = todolistTasks
@@ -109,6 +115,7 @@ function App() {
                                filter={changeFilterHandler}
                                deleteList={deleteTodoList}
                                changeTaskTitle={changeTaskTitle}
+                               changeTodoListTitle={changeTodoListTitle}
                 />
             </div>
         )
@@ -123,4 +130,5 @@ function App() {
 
     )
 }
+
 export default App;

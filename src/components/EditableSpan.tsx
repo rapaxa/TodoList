@@ -3,11 +3,12 @@ import {ChangeEvent, useState} from "react";
 type EditableSpanPropsType = {
     title: string;
     changeTitleCallback: (title: string) => void;
+
 }
 
 export const EditableSpan = ({
                                  title,
-                                 changeTitleCallback
+                                 changeTitleCallback,
                              }: EditableSpanPropsType) => {
     const [isEditMode, setIsEditMode] = useState<boolean>(false)
     const [titleInput, setTitleInput] = useState<string>(title);
@@ -17,8 +18,10 @@ export const EditableSpan = ({
     }
 
     const offEdit = () => {
+
         setIsEditMode(false)
-        changeTitleCallback(titleInput)
+        changeTitleCallback( titleInput)
+
     }
 
     const setTitleInputHandler = (event: ChangeEvent<HTMLInputElement>) => {

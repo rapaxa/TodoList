@@ -4,6 +4,7 @@ import {Button} from "./Button.tsx";
 import s from './Button.module.css'
 import s2 from './TodoListItems.module.css'
 import {EditableSpan} from "./EditableSpan.tsx";
+import {v1} from "uuid";
 
 type TodoListItemsProps = {
     id: string;
@@ -15,6 +16,7 @@ type TodoListItemsProps = {
     filter: (id: string, filter: Filter) => void;
     deleteList: (id: string) => void;
     changeTaskTitle: (id: string, idItem: string, newTitle: string) => void;
+    changeTodoListTitle: (id: string, newTitle: string)=>void;
 }
 
 export const TodoListItems = ({
@@ -27,6 +29,7 @@ export const TodoListItems = ({
                                   filter,
                                   deleteList,
                                   changeTaskTitle,
+                                  changeTodoListTitle
                               }: TodoListItemsProps) => {
     const changeFilterHandler = (filterValues: Filter) => {
         filter(id, filterValues);
@@ -37,35 +40,49 @@ export const TodoListItems = ({
     const deleteTodoList = () => {
         deleteList(id)
     }
-
-
+    const todoListTitleCallback=(newTitle:string)=>{
+        changeTodoListTitle(id,newTitle)
+    }
     return (
         <>
             <div className={s2.todo_list}>
                 <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <h3>{todoList.title}</h3>
+
+                    <EditableSpan title={todoList.title} changeTitleCallback={todoListTitleCallback}/>
                     <Button className={s.button_delete} onClickHandler={deleteTodoList} title={"X"}/>
                 </div>
-                <AddList changeTaskTitle={changeTaskTitle} maxLength={10} createItem={createTask}/>
+
+
+                <AddList maxLength={10} createItem={createTask}/>
+
+
                 <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div className={s2.todo_items}>
                         {todoLists.length <= 0 ? "Not available tasks" :
                             <ul>
-                                {todoLists.map(task => (
-                                    <li key={task.id}>
-                                        <EditableSpan changeTitleCallback={changeTaskTitle} title={task.title}/>
-                                        <input checked={task.isDone}
-                                               onChange={() => updateTask(id, task.id)}
-                                               type="checkbox"/>
-                                    </li>
-                                ))}
+                                {todoLists.map(task => {
+                                        const changeTitleCallback = (newTitle: string) => {
+                                            changeTaskTitle(id, task.id, newTitle);
+                                        }
+                                        return (
+                                            <li key={task.id}>
+                                                <EditableSpan changeTitleCallback={changeTitleCallback} title={task.title}/>
+
+
+                                                <input checked={task.isDone}
+                                                       onChange={() => updateTask(id, task.id)}
+                                                       type="checkbox"/>
+                                            </li>
+                                        )
+                                    }
+                                )}
                             </ul>
                         }
                     </div>
                     <div>
                         <ul>
                             {todoLists.map(item => (
-                                <li>
+                                <li key={v1()}>
                                     <button onClick={() => deleteTask(id, item.id)}>X</button>
                                 </li>
                             ))}
