@@ -1,5 +1,5 @@
 import { Delete } from "@mui/icons-material";
-import { IconButton} from "@mui/material";
+import {IconButton} from "@mui/material";
 
 type TaskDeleteButtonProps = {
     id: string;
@@ -8,7 +8,7 @@ type TaskDeleteButtonProps = {
 };
 
 export const TaskDeleteButton = ({ id, taskId, onDelete }: TaskDeleteButtonProps) => (
-    <li>
+    <li >
         <IconButton onClick={() => onDelete(id, taskId)}  aria-label="delete">
             <Delete />
         </IconButton>

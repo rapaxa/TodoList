@@ -4,6 +4,8 @@ import {TodoListHeader} from "./TodoListHeader.tsx";
 import {TaskItem} from "./TaskItem.tsx";
 import {TaskDeleteButton} from "./TaskDeleteButton.tsx";
 import {FilterButtons} from "./FilterButtons.tsx";
+import {List, Stack} from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 type TodoListItemsProps = {
     id: string;
@@ -40,43 +42,51 @@ export const TodoListItems = ({
 
 
     return (
-        <div>
-            <TodoListHeader title={todoList.title} onDelete={deleteTodoList}/>
-            <AddList createItem={createTask}/>
 
-            <div>
-                {todoLists.length === 0 ? (
-                    "Not available tasks"
-                ) : (
-                    <ul>
-                        {todoLists.map(task => (
-                            <TaskItem
-                                key={task.id}
+        <Grid padding={2}>
+            <TodoListHeader title={todoList.title} onDelete={deleteTodoList}/>
+            <AddList label={"New Task"} maxLength={12} createItem={createTask}/>
+            <Stack direction={"row"}
+                   sx={
+                       {
+                           justifyContent: "space-between"
+                       }
+                   }>
+                <div>
+                    {todoLists.length === 0 ? (
+                        "Not available tasks"
+                    ) : (
+                        <List disablePadding dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                            {todoLists.map(task => (
+                                <TaskItem
+                                    key={task.id}
+                                    id={id}
+                                    task={task}
+                                    updateTask={updateTask}
+                                    changeTitleName={changeTitleName}
+                                />
+                            ))}
+                        </List>
+                    )}
+                </div>
+
+                <div>
+                    <List disablePadding>
+                        {todoLists.map(item => (
+                            <TaskDeleteButton
+                                key={item.id}
                                 id={id}
-                                task={task}
-                                updateTask={updateTask}
-                                changeTitleName={changeTitleName}
+                                taskId={item.id}
+                                onDelete={deleteTask}
                             />
                         ))}
-                    </ul>
-                )}
-            </div>
+                    </List>
+                </div>
+            </Stack>
 
-            <div>
-                <ul>
-                    {todoLists.map(item => (
-                        <TaskDeleteButton
-                            key={item.id}
-                            id={id}
-                            taskId={item.id}
-                            onDelete={deleteTask}
-                        />
-                    ))}
-                </ul>
-            </div>
 
-            <FilterButtons onFilterChange={changeFilterHandler}/>
-        </div>
+            <FilterButtons activeFilter={todoList.filter} onFilterChange={changeFilterHandler}/>
+        </Grid>
     );
 
 }

@@ -1,15 +1,22 @@
-import { useState,type KeyboardEvent} from "react";
-import {Button} from "./Button.tsx";
+import {useState, type KeyboardEvent, ChangeEvent} from "react";
+import {Button, TextField} from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Grid from "@mui/material/Grid";
+
 type AddListProps = {
-    createItem:(text:string) => void;
+    createItem: (text: string) => void;
+    label: string;
+    maxLength: number;
 }
-export const AddList= ({createItem}:AddListProps) => {
+export const AddList = ({createItem,label,maxLength}: AddListProps) => {
     const [title, setTitle] = useState<string>('');
+    const [errorNote, setErrorNote] = useState<boolean>(false);
     const handleCreateTask = () => {
-        if (title.trim() !== '') {
-        createItem(title)
+        if (title.trim() !== '' && title.length <= maxLength) {
+                createItem(title)
+                setTitle("")
         } else {
-            console.log('error')
+            setErrorNote(true)
         }
 
     }
@@ -18,16 +25,31 @@ export const AddList= ({createItem}:AddListProps) => {
             handleCreateTask()
         }
     }
-    return (
-        <div >
-            <input value={title}
-                   onChange={(e) =>{
-                setTitle(e.target.value)
-            }} type="text"
-                    placeholder={'Max value size 12'}
-            onKeyDown={createItemOnEnterHandler}/>
-            <Button  title={'+'} onClickHandler={handleCreateTask}/>
+    const setInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
+        if(title.length <= maxLength){
+            setErrorNote(false)
 
-        </div>
+        }else{
+            setErrorNote(true)
+        }
+
+    }
+    return (
+        <Grid >
+            <TextField id="standard-basic"
+                       placeholder={`Max value size ${maxLength}`}
+                       label={label}
+                       value={title}
+                       helperText={errorNote && "error"}
+                       error={errorNote}
+                       variant="standard"
+                       onChange={setInputHandler}
+                       onKeyDown={createItemOnEnterHandler}
+            />
+
+            <Button size={"small"} color={"success"} onClick={handleCreateTask}>{<AddCircleIcon/>}</Button>
+
+        </Grid>
     )
 }

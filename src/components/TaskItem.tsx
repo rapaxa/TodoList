@@ -1,6 +1,6 @@
 import {TodoListsItem} from "../App.tsx";
 import {EditableSpan} from "./EditableSpan.tsx";
-import {Checkbox} from "@mui/material";
+import {Checkbox, ListItem} from "@mui/material";
 
 type TaskItemProps = {
     id: string;
@@ -15,11 +15,12 @@ export const TaskItem = ({ id, task, updateTask, changeTitleName }: TaskItemProp
     };
 
     return (
-        <li key={task.id}>
-            <EditableSpan title={task.title} callback={handleTitleChange} />
+        <ListItem disablePadding key={task.id}>
             <Checkbox checked={task.isDone}
-                      onChange={() => updateTask(id, task.id)}  defaultChecked color="success" />
+                      onChange={() => updateTask(id, task.id)}  color="success" />
+            <EditableSpan title={task.title} callback={handleTitleChange} />
 
-        </li>
+
+        </ListItem>
     );
 };
