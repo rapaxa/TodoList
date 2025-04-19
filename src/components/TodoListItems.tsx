@@ -16,7 +16,8 @@ type TodoListItemsProps = {
     addTask: (id: string, task: string) => void;
     filter: (id: string, filter: Filter) => void;
     deleteList: (id: string) => void;
-    changeTitleName: (id: string, idItem: string, newTitle: string) => void;
+    changeTaskTitle: (idOfList: string, id: string, newTitle: string) => void;
+    changeTitle: (id: string, title: string) => void;
 }
 
 export const TodoListItems = ({
@@ -28,7 +29,8 @@ export const TodoListItems = ({
                                   addTask,
                                   filter,
                                   deleteList,
-                                  changeTitleName
+                                  changeTaskTitle,
+    changeTitle
                               }: TodoListItemsProps) => {
     const changeFilterHandler = (filterValues: Filter) => {
         filter(id, filterValues);
@@ -44,7 +46,7 @@ export const TodoListItems = ({
     return (
 
         <Grid padding={2}>
-            <TodoListHeader title={todoList.title} onDelete={deleteTodoList}/>
+            <TodoListHeader id={id} title={todoList.title} onDelete={deleteTodoList} changeTitle={changeTitle}/>
             <AddList label={"New Task"} maxLength={12} createItem={createTask}/>
             <Stack direction={"row"}
                    sx={
@@ -63,7 +65,7 @@ export const TodoListItems = ({
                                     id={id}
                                     task={task}
                                     updateTask={updateTask}
-                                    changeTitleName={changeTitleName}
+                                    changeTitleName={changeTaskTitle}
                                 />
                             ))}
                         </List>

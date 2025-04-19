@@ -4,7 +4,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Grid from "@mui/material/Grid";
 
 type AddListProps = {
-    createItem: (text: string) => void;
+    createItem: (title: string) => void;
     label: string;
     maxLength: number;
 }
