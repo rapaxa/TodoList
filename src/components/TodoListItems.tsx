@@ -55,7 +55,7 @@ export const TodoListItems = ({
                        }
                    }>
                 <div>
-                    {todoLists.length === 0 ? (
+                    {todoLists.length <= 0 ? (
                         "Not available tasks"
                     ) : (
                         <List disablePadding dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
