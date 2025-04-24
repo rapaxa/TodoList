@@ -1,3 +1,4 @@
+import { Input } from "@mui/material";
 import {ChangeEvent, type KeyboardEvent, useState} from "react";
 
 type EditableSpanProps = {
@@ -29,7 +30,7 @@ export const EditableSpan = ({title, callback}: EditableSpanProps) => {
     return (
         <>
             {onEdit ?
-                <input type="text"
+                <Input type="text"
                        autoFocus
                        value={titleInput}
                        onChange={setTitleInputHandler}

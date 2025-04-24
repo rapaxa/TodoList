@@ -36,12 +36,13 @@ export const AddList = ({createItem,label,maxLength}: AddListProps) => {
 
     }
     return (
-        <Grid >
+        <Grid  >
             <TextField id="standard-basic"
+                       color='secondary'
                        placeholder={`Max value size ${maxLength}`}
                        label={label}
                        value={title}
-                       helperText={errorNote && "error"}
+                       helperText={errorNote && "A lot symbols or your have wrong text"}
                        error={errorNote}
                        variant="standard"
                        onChange={setInputHandler}

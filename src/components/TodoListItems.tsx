@@ -47,7 +47,7 @@ export const TodoListItems = ({
 
         <Grid padding={2}>
             <TodoListHeader id={id} title={todoList.title} onDelete={deleteTodoList} changeTitle={changeTitle}/>
-            <AddList label={"New Task"} maxLength={12} createItem={createTask}/>
+            <AddList  label={"New Task"} maxLength={12} createItem={createTask}/>
             <Stack direction={"row"}
                    sx={
                        {
@@ -58,7 +58,7 @@ export const TodoListItems = ({
                     {todoLists.length <= 0 ? (
                         "Not available tasks"
                     ) : (
-                        <List disablePadding dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                        <List disablePadding dense sx={{ width: '100%', maxWidth: 360 }}>
                             {todoLists.map(task => (
                                 <TaskItem
                                     key={task.id}
